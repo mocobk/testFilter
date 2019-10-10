@@ -130,7 +130,7 @@ class Meta(type):
         run_tag = set(Tag.RUN_TAG)
         run_level = int(Level.RUN_LEVEL)
         skip_tag_reason = '\n执行环境非 {}'
-        skip_level_reason = '\n用例执行级别小于 {}'
+        skip_level_reason = '\n用例执行优先级小于 {}'
         for item in items:
             if item.startswith('test'):
                 if not hasattr(attr_dict[item], TAG_META):
@@ -148,7 +148,7 @@ class Meta(type):
                     setattr(attr_dict[item], '__unittest_skip__', True)
                     skip_reason = getattr(attr_dict[item], '__unittest_skip_why__', '')
                     setattr(attr_dict[item], '__unittest_skip_why__',
-                            (skip_reason + skip_level_reason.format(getattr(attr_dict[item], LEVEL_META).desc)).strip())
+                            (skip_reason + skip_level_reason.format(Level.RUN_LEVEL.desc)).strip())
 
         return super(Meta, mcs).__new__(mcs, cls_name, bases, attr_dict)
 
@@ -169,8 +169,8 @@ class _Filter:
     Meta = Meta
 
     def __init__(self):
-        self._env = Tag.ALL
-        self._level = Level.P4
+        self._env = None
+        self._level = 'p4'
 
     @property
     def env(self):
@@ -178,8 +178,8 @@ class _Filter:
 
     @env.setter
     def env(self, value: str):
-        self._env = self._ENV_MAP.get(value.upper(), Tag.ALL)
-        Tag.set_run_tag(self._env)
+        self._env = value
+        Tag.set_run_tag(self._ENV_MAP.get(value.upper(), Tag.ALL))
 
     @property
     def level(self):
@@ -187,8 +187,8 @@ class _Filter:
 
     @level.setter
     def level(self, value: str):
-        self._level = self._LEVEL_MAP.get(value.upper(), Level.P4)
-        Level.set_run_level(self._level)
+        self._level = value
+        Level.set_run_level(self._LEVEL_MAP.get(value.upper(), Level.P4))
 
 
 Filter = _Filter()

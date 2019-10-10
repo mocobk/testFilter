@@ -14,8 +14,8 @@ import unittest
 from testfilter import runIf, Filter
 
 # 设置执行环境 执行级别
-Filter.env = 'test'
-Filter.level = 'p2'
+Filter.env = 'test'  # test uat prod/production 不区分大小写
+Filter.level = 'p2'  # smoke/p1 p2 p3 p4 不区分大小写
 
 
 class Demo(unittest.TestCase, metaclass=Filter.Meta):
@@ -29,7 +29,7 @@ class Demo(unittest.TestCase, metaclass=Filter.Meta):
 
     @runIf.env.UAT
     @runIf.env.TEST
-    @runIf.level_in.P3   # 测试环境和 UAT 环境下，且用例级别在 P3 以上执行
+    @runIf.level_in.P3   # 测试环境和 UAT 环境下，且用例优先级在 P3 以上执行
     def test_003(self):
         self.assertEqual(1, 1)
 
