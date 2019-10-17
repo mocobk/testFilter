@@ -9,7 +9,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="testfilter",
-    version="0.0.5",
+    version="0.0.6",
     author="mocobk",
     author_email="mocobk@163.com",
     description="unittest 用例执行过滤， 可选择用例执行环境或用例级别进行过滤",

@@ -29,6 +29,10 @@ class Demo(unittest.TestCase, metaclass=Filter.Meta):  # 添加 metaclass 参数
     def test_004(self):
         self.assertEqual(1, 1)
 
+    @runIf.level_in.P0
+    def test_005(self):
+        self.assertEqual(1, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

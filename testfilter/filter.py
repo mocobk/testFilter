@@ -84,14 +84,15 @@ class Tag:
 
 
 class Level:
-    SMOKE = NewLevel(10, 'Smoke')
+    SMOKE = NewLevel(0, 'Smoke')
+    P0 = NewLevel(0, 'P0')
     P1 = NewLevel(10, 'P1')
     P2 = NewLevel(20, 'P2')
     P3 = NewLevel(30, 'P3')
     P4 = NewLevel(40, 'P4')
 
     RUN_LEVEL = P4
-    DEFAULT = P1
+    DEFAULT = P0
 
     @classmethod
     def set_run_level(cls, _level):
@@ -161,6 +162,8 @@ class _Filter:
         'PRODUCTION': Tag.PROD,
     }
     _LEVEL_MAP = {
+        'SMOKE': Level.SMOKE,
+        'P0': Level.P0,
         'P1': Level.P1,
         'P2': Level.P2,
         'P3': Level.P3,
@@ -195,7 +198,7 @@ Filter = _Filter()
 
 names = namedtuple('flag', ['env', 'level_in'])
 env = namedtuple('env', ['TEST', 'UAT', 'PROD', 'NOT_TEST', 'NOT_UAT', 'NOT_PROD'])
-levels = namedtuple('levels', ['SMOKE', 'P1', 'P2', 'P3', 'P4'])
+levels = namedtuple('levels', ['SMOKE', 'P0', 'P1', 'P2', 'P3', 'P4'])
 
 runIf = names(
     env=env(
@@ -207,7 +210,8 @@ runIf = names(
         NOT_PROD=_tag_decorator(_tag={Tag.TEST, Tag.UAT}),
     ),
     level_in=levels(
-        SMOKE=_level_decorator(Level.P1),
+        SMOKE=_level_decorator(Level.SMOKE),
+        P0=_level_decorator(Level.P0),
         P1=_level_decorator(Level.P1),
         P2=_level_decorator(Level.P2),
         P3=_level_decorator(Level.P3),
