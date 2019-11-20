@@ -3,6 +3,7 @@
 # email: mailmzb@qq.com
 
 from collections import namedtuple
+from inspect import isfunction
 
 TAG_META = '__tag__'
 LEVEL_META = '__level__'
@@ -133,7 +134,7 @@ class Meta(type):
         skip_tag_reason = '\n执行环境非 {}'
         skip_level_reason = '\n用例执行优先级小于 {}'
         for item in items:
-            if item.startswith('test'):
+            if item.startswith('test') and isfunction(attr_dict[item]):
                 if not hasattr(attr_dict[item], TAG_META):
                     setattr(attr_dict[item], TAG_META, Tag.DEFAULT)
                 # 获取交集
@@ -197,7 +198,7 @@ class _Filter:
 Filter = _Filter()
 
 names = namedtuple('flag', ['env', 'level_in'])
-env = namedtuple('env', ['TEST', 'UAT', 'PROD', 'NOT_TEST', 'NOT_UAT', 'NOT_PROD'])
+env = namedtuple('env', ['TEST', 'UAT', 'PROD', 'NOT_TEST', 'NOT_UAT', 'NOT_PROD', 'ALL'])
 levels = namedtuple('levels', ['SMOKE', 'P0', 'P1', 'P2', 'P3', 'P4'])
 
 runIf = names(
@@ -208,6 +209,7 @@ runIf = names(
         NOT_TEST=_tag_decorator(_tag={Tag.UAT, Tag.PROD}),
         NOT_UAT=_tag_decorator(_tag={Tag.TEST, Tag.PROD}),
         NOT_PROD=_tag_decorator(_tag={Tag.TEST, Tag.UAT}),
+        ALL=_tag_decorator(_tag=Tag.DEFAULT),
     ),
     level_in=levels(
         SMOKE=_level_decorator(Level.SMOKE),

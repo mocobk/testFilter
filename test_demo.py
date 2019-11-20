@@ -6,7 +6,7 @@ from testfilter import runIf, Filter
 
 
 # 设置执行环境 执行级别
-Filter.env = 'test'  # test uat prod/production 不区分大小写
+Filter.env = 'production'  # test uat prod/production 不区分大小写
 Filter.level = 'p2'  # smoke/p1 p2 p3 p4 不区分大小写
 
 
@@ -29,6 +29,7 @@ class Demo(unittest.TestCase, metaclass=Filter.Meta):  # 添加 metaclass 参数
     def test_004(self):
         self.assertEqual(1, 1)
 
+    @runIf.env.ALL
     @runIf.level_in.P0
     def test_005(self):
         self.assertEqual(1, 1)
